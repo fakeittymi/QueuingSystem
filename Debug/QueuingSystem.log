@@ -1,0 +1,8 @@
+﻿  pch.cpp
+  AssemblyInfo.cpp
+  Program.cpp
+  Form1.cpp
+  Generating Code...
+  .NETFramework,Version=v4.7.2.AssemblyAttributes.cpp
+  AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
+  QueuingSystem.vcxproj -> D:\Проекты\2 курс\Технологии программирования\QueuingSystem\Debug\QueuingSystem.exe
