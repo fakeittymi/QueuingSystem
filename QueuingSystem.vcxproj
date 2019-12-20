@@ -146,6 +146,7 @@
     <ClInclude Include="Form1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Generator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Processor.h" />
     <ClInclude Include="Resource.h" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="Generator.cpp" />
     <ClCompile Include="Processor.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Form1.cpp" />

@@ -32,6 +32,11 @@ namespace Program {
 				delete components;
 			}
 		}
+	private: System::Windows::Forms::GroupBox^ groupBox1;
+
+	protected:
+
+	protected:
 
 	private:
 		/// <summary>
@@ -46,13 +51,24 @@ namespace Program {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
 			this->SuspendLayout();
+			// 
+			// groupBox1
+			// 
+			this->groupBox1->Location = System::Drawing::Point(12, 12);
+			this->groupBox1->Name = L"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(209, 364);
+			this->groupBox1->TabIndex = 0;
+			this->groupBox1->TabStop = false;
+			this->groupBox1->Text = L"¬ходные данные";
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(247, 261);
+			this->ClientSize = System::Drawing::Size(518, 518);
+			this->Controls->Add(this->groupBox1);
 			this->Name = L"Form1";
 			this->Text = L"√азетный киоск";
 			this->ResumeLayout(false);
