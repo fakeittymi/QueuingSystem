@@ -2,9 +2,23 @@
 #include "Generator.h"
 #include <random>
 
-Generator::Generator(int newCommon){
+Generator::Generator() {};
+
+Generator::Generator(int newWorkDayCount, int newCommon){
+    if (newWorkDayCount > 0) {
+        workDayCount = newWorkDayCount;
+    }
+    else {
+        workDayCount = 1;
+    }
+
+    if (newCommon > 0) {
+        commonDayRequests = newCommon;
+    }
+    else {
+        commonDayRequests = 175;
+    }
     
-    commonDayRequests = newCommon;
     specialDayRequests = 0;
 }
 
@@ -30,14 +44,17 @@ int Generator::GetDayType() {
     case 9:
         return 2;
         break;
+    default:
+        return 0;
     }
 }
 
 int Generator::GenerateRequests() {
 
-    switch (GetDayType())
-    {
+        switch (GetDayType())
+        {
         case 0:
+            specialDayRequests = 0;
             break;
         case 1:
             specialDayRequests = 50;
@@ -45,7 +62,7 @@ int Generator::GenerateRequests() {
         case 2:
             specialDayRequests = 100;
             break;
-    }
+        }
 
     return commonDayRequests + specialDayRequests;
 }

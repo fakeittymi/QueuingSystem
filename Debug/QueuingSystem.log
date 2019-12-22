@@ -1,7 +1,6 @@
 ﻿  Form1.cpp
-  Generator.cpp
+  Processor.cpp
   Program.cpp
   Generating Code...
-D:\Проекты\2 курс\Технологии программирования\QueuingSystem\Generator.cpp(34): warning C4715: 'Generator::GetDayType': not all control paths return a value
   AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   QueuingSystem.vcxproj -> D:\Проекты\2 курс\Технологии программирования\QueuingSystem\Debug\QueuingSystem.exe

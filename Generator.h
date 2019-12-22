@@ -1,19 +1,26 @@
 #pragma once
-ref class Generator
+class Generator
 {
 	public:
-		Generator(int newCommon);
+		Generator();
+		Generator(int newWorkDayCount, int newCommon);
 
 		///<summary>
 		///Function returns requests amount per day
 		///</summary>
 		int GenerateRequests();
-	private:
+
+		///<summary>
+		///Multiplier of the amount of request count
+		///</summary>
+		int workDayCount;
+	
 		///<summary>
 		///Average number of constant requests
 		///</summary>
 		int commonDayRequests;
 
+	private:
 		///<summary>
 		///Random requests
 		///</summary>
