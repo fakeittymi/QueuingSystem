@@ -4,13 +4,7 @@
 
 Generator::Generator() {};
 
-Generator::Generator(int newWorkDayCount, int newCommon){
-    if (newWorkDayCount > 0) {
-        workDayCount = newWorkDayCount;
-    }
-    else {
-        workDayCount = 1;
-    }
+Generator::Generator(int newCommon){
 
     if (newCommon > 0) {
         commonDayRequests = newCommon;

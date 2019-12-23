@@ -1,46 +1,53 @@
 #pragma once
+#include "pch.h"
 #include "Generator.h"
 #include "StatisticManager.h"
 
 class Processor: Generator, StatisticManager
 {
 	public:
-		Processor(StatisticManager statisticManager);
+		Processor(StatisticManager statisticManager, Generator generator, int newWorkDayCout);
 		///<summary>
 		///Modeling starting
 		///</summary>
 		void Start();
 
 		///<summary>
-		///Statistic Manager instance
+		///Method to get modeling information
 		///</summary>
-		StatisticManager _statisticManager;
+		vector<ModelingInfo> GetModelingInfo();
+
+		///<summary>
+		///Get average amount of bales
+		///</summary>
+		float GetAverageBales(vector<StatisticManager::ModelingInfo> _modelInfo);
+
 
 	private:
 		///<summary>
 		///Calculating optimal amount of bales and sales profit
 		///</summary>
-		void ProfitCalculation(int $_requestAmount);
+		void ProfitCalculation(int _requestAmount);
 
 		///<summary>
-		///Earnings from newspapers sold
+		///Multiplier of the amount of request count
 		///</summary>
-		int _debit;
+		int workDayCount;
 
 		///<summary>
-		///Spent on unsold newspapers
+		///Modeling data instance
 		///</summary>
-		int _credit;
-		
-		///<summary>
-		///Unsold newspapers
-		///</summary>
-		int _unsoldNewspapers;
+		ModelingInfo _modelingInfo;
 
 		///<summary>
-		///Newspapers bales that contain 25 newspapers
+		///Statistic Manager instance
 		///</summary>
-		int _bales;
+		StatisticManager _statisticManager;
+
+		///<summary>
+		///Generator instance
+		///</summary>
+		Generator _generator;
 
 
 };
