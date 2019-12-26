@@ -12,12 +12,12 @@ class Generator
 		///</summary>
 		int GenerateRequests();
 
-	private:
 		///<summary>
 		///Average number of constant requests
 		///</summary>
 		int commonDayRequests;
 
+	private:
 		///<summary>
 		///Random requests
 		///</summary>

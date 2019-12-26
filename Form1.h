@@ -2,6 +2,9 @@
 #include "pch.h"
 #include "Generator.h"
 #include "Processor.h"
+#include <ctype.h>
+#include <string>
+
 
 
 namespace Program {
@@ -76,10 +79,10 @@ namespace Program {
 			this->commonDayRequestCountTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->workDayCountTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+			this->averageBaleAmountLabel = (gcnew System::Windows::Forms::Label());
+			this->averageBaleAmountTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->resultListBox = (gcnew System::Windows::Forms::ListBox());
 			this->startButton = (gcnew System::Windows::Forms::Button());
-			this->averageBaleAmountTextBox = (gcnew System::Windows::Forms::TextBox());
-			this->averageBaleAmountLabel = (gcnew System::Windows::Forms::Label());
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
 			this->SuspendLayout();
@@ -120,6 +123,7 @@ namespace Program {
 			this->commonDayRequestCountTextBox->Size = System::Drawing::Size(100, 20);
 			this->commonDayRequestCountTextBox->TabIndex = 1;
 			this->commonDayRequestCountTextBox->Text = L"175";
+			this->commonDayRequestCountTextBox->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Form1::commonDayRequestCountTextBox_KeyPress);
 			// 
 			// workDayCountTextBox
 			// 
@@ -128,6 +132,7 @@ namespace Program {
 			this->workDayCountTextBox->Size = System::Drawing::Size(100, 20);
 			this->workDayCountTextBox->TabIndex = 0;
 			this->workDayCountTextBox->Text = L"1";
+			this->workDayCountTextBox->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &Form1::workDayCountTextBox_KeyPress);
 			// 
 			// groupBox2
 			// 
@@ -140,6 +145,23 @@ namespace Program {
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = L"Результаты работы симуляции";
+			// 
+			// averageBaleAmountLabel
+			// 
+			this->averageBaleAmountLabel->AutoSize = true;
+			this->averageBaleAmountLabel->Location = System::Drawing::Point(7, 254);
+			this->averageBaleAmountLabel->Name = L"averageBaleAmountLabel";
+			this->averageBaleAmountLabel->Size = System::Drawing::Size(168, 13);
+			this->averageBaleAmountLabel->TabIndex = 3;
+			this->averageBaleAmountLabel->Text = L"Среднее количество кип в день";
+			// 
+			// averageBaleAmountTextBox
+			// 
+			this->averageBaleAmountTextBox->Enabled = false;
+			this->averageBaleAmountTextBox->Location = System::Drawing::Point(6, 273);
+			this->averageBaleAmountTextBox->Name = L"averageBaleAmountTextBox";
+			this->averageBaleAmountTextBox->Size = System::Drawing::Size(130, 20);
+			this->averageBaleAmountTextBox->TabIndex = 2;
 			// 
 			// resultListBox
 			// 
@@ -158,22 +180,6 @@ namespace Program {
 			this->startButton->Text = L"Старт";
 			this->startButton->UseVisualStyleBackColor = true;
 			this->startButton->Click += gcnew System::EventHandler(this, &Form1::startButton_Click);
-			// 
-			// averageBaleAmountTextBox
-			// 
-			this->averageBaleAmountTextBox->Location = System::Drawing::Point(6, 273);
-			this->averageBaleAmountTextBox->Name = L"averageBaleAmountTextBox";
-			this->averageBaleAmountTextBox->Size = System::Drawing::Size(100, 20);
-			this->averageBaleAmountTextBox->TabIndex = 2;
-			// 
-			// averageBaleAmountLabel
-			// 
-			this->averageBaleAmountLabel->AutoSize = true;
-			this->averageBaleAmountLabel->Location = System::Drawing::Point(7, 254);
-			this->averageBaleAmountLabel->Name = L"averageBaleAmountLabel";
-			this->averageBaleAmountLabel->Size = System::Drawing::Size(168, 13);
-			this->averageBaleAmountLabel->TabIndex = 3;
-			this->averageBaleAmountLabel->Text = L"Среднее количество кип в день";
 			// 
 			// Form1
 			// 
@@ -195,19 +201,28 @@ namespace Program {
 #pragma endregion
 	private: System::Void startButton_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		int _workDayCount = Convert::ToInt32(workDayCountTextBox->Text);
-		int _commonDayRequestCount = Convert::ToInt32(commonDayRequestCountTextBox->Text);
+		int _workDayCount = 1;
+		int _commonDayRequestCount = 175;
+		if (workDayCountTextBox->Text != "") {
+			_workDayCount = Convert::ToInt32(workDayCountTextBox->Text);
+		}
+		
+		if (commonDayRequestCountTextBox->Text != "") {
+			_commonDayRequestCount = Convert::ToInt32(commonDayRequestCountTextBox->Text);
+		}
+
 		vector<StatisticManager::ModelingInfo> _modelingInfo;
 		StatisticManager statisticManager;
 		Generator generator(_commonDayRequestCount);
 		Processor processor(statisticManager, generator, _workDayCount);
+
 
 		processor.Start();
 		_modelingInfo = processor.GetModelingInfo();
 
 		resultListBox->Items->Clear();
 
-		for (int i = 0; i < _workDayCount; i++) {
+		for (int i = 0; i < processor.workDayCount; i++) {
 			resultListBox->Items->Add((i+1)+") В день "+(i+1)+" из "+_modelingInfo[i].bales+" кип");
 			resultListBox->Items->Add("продано " + _modelingInfo[i].soldNewspapers + " газет");
 			resultListBox->Items->Add("Непроданных газет " + _modelingInfo[i].unsoldNewspapers + " на сумму " + _modelingInfo[i].credit);
@@ -215,6 +230,25 @@ namespace Program {
 		}
 
 		averageBaleAmountTextBox->Text = Convert::ToString(processor.GetAverageBales(_modelingInfo));
+		workDayCountTextBox->Text = Convert::ToString(processor.workDayCount);
+		commonDayRequestCountTextBox->Text = Convert::ToString(_commonDayRequestCount);
 	}
+
+private: System::Void workDayCountTextBox_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+
+	wchar_t ch = e->KeyChar;
+
+	if (!isdigit(ch) && (!iscntrl(ch))){
+		e->Handled = true;
+	}
+}
+private: System::Void commonDayRequestCountTextBox_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+
+	wchar_t ch = e->KeyChar;
+
+	if (!isdigit(ch) && (!iscntrl(ch))) {
+		e->Handled = true;
+	}
+}
 };
 }

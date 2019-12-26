@@ -39,24 +39,24 @@ void Processor::Start() {
 
 void Processor::ProfitCalculation(int _requestAmount) {
 
-	if (_requestAmount%25 == 0) {
-		_modelingInfo.bales = _requestAmount / 25;
+	if (_requestAmount%baleSize == 0) {
+		_modelingInfo.bales = _requestAmount / baleSize;
 	}
 	else {
-		_modelingInfo.bales = _requestAmount / 25 + 1;
+		_modelingInfo.bales = _requestAmount / baleSize + 1;
 	}
 
-	_modelingInfo.unsoldNewspapers = _modelingInfo.bales * 25 - _requestAmount;
-	_modelingInfo.credit = _modelingInfo.unsoldNewspapers * 4;
-	_modelingInfo.debit = _requestAmount * 3 - _modelingInfo.credit;
+	_modelingInfo.unsoldNewspapers = _modelingInfo.bales * baleSize - _requestAmount;
+	_modelingInfo.credit = _modelingInfo.unsoldNewspapers * newspaperCredit;
+	_modelingInfo.debit = _requestAmount * newspaperProfit - _modelingInfo.credit;
 	_modelingInfo.soldNewspapers = _requestAmount;
 
-	if ((_modelingInfo.debit) < (_modelingInfo.bales - 1) * 75) {
+	if ((_modelingInfo.debit) < (_modelingInfo.bales - 1) * baleSize * newspaperProfit) {
 		_modelingInfo.bales--;
 		_modelingInfo.unsoldNewspapers = 0;
 		_modelingInfo.credit = 0;
-		_modelingInfo.debit = _modelingInfo.bales * 75;
-		_modelingInfo.soldNewspapers = _modelingInfo.bales * 25;
+		_modelingInfo.debit = _modelingInfo.bales * baleSize * newspaperProfit;
+		_modelingInfo.soldNewspapers = _modelingInfo.bales * baleSize;
 	}
 }
 

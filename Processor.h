@@ -22,6 +22,11 @@ class Processor: Generator, StatisticManager
 		///</summary>
 		float GetAverageBales(vector<StatisticManager::ModelingInfo> _modelInfo);
 
+		///<summary>
+		///Multiplier of the amount of request count
+		///</summary>
+		int workDayCount;
+
 
 	private:
 		///<summary>
@@ -30,9 +35,19 @@ class Processor: Generator, StatisticManager
 		void ProfitCalculation(int _requestAmount);
 
 		///<summary>
-		///Multiplier of the amount of request count
+		///Variable contains amount of newspapers in one bale
 		///</summary>
-		int workDayCount;
+		const int baleSize = 25;
+
+		///<summary>
+		///Variable contains payment the market gets from 1 sold newspaper
+		///</summary>
+		const int newspaperProfit = 3;
+
+		///<summary>
+		///Variable contains number the market pays for 1 unsold newspaper
+		///</summary>
+		const int newspaperCredit = 4;
 
 		///<summary>
 		///Modeling data instance

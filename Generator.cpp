@@ -6,13 +6,7 @@ Generator::Generator() {};
 
 Generator::Generator(int newCommon){
 
-    if (newCommon > 0) {
-        commonDayRequests = newCommon;
-    }
-    else {
-        commonDayRequests = 175;
-    }
-    
+    commonDayRequests = newCommon; 
     specialDayRequests = 0;
 }
 
