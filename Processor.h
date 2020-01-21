@@ -6,7 +6,8 @@
 class Processor: Generator, StatisticManager
 {
 	public:
-		Processor(StatisticManager statisticManager, Generator generator, int newWorkDayCout);
+		Processor(StatisticManager& newStatisticManager, Generator& newGenerator, int& newWorkDayCout, int& newBaleCount);
+
 		///<summary>
 		///Modeling starting
 		///</summary>
@@ -15,24 +16,24 @@ class Processor: Generator, StatisticManager
 		///<summary>
 		///Method to get modeling information
 		///</summary>
-		vector<ModelingInfo> GetModelingInfo();
+		std::vector<ModelingInfo> GetModelingInfo();
 
-		///<summary>
-		///Get average amount of bales
-		///</summary>
-		float GetAverageBales(vector<StatisticManager::ModelingInfo> _modelInfo);
+	private:
 
 		///<summary>
 		///Multiplier of the amount of request count
 		///</summary>
 		int workDayCount;
 
-
-	private:
 		///<summary>
-		///Calculating optimal amount of bales and sales profit
+		///Daily amount of bales the store purchases
 		///</summary>
-		void ProfitCalculation(int _requestAmount);
+		int baleCount;
+
+		///<summary>
+		///Daily amount of newspapers the store purchases
+		///</summary>
+		int newspaperCount;
 
 		///<summary>
 		///Variable contains amount of newspapers in one bale
@@ -52,18 +53,21 @@ class Processor: Generator, StatisticManager
 		///<summary>
 		///Modeling data instance
 		///</summary>
-		ModelingInfo _modelingInfo;
+		ModelingInfo modelingInfo;
 
 		///<summary>
 		///Statistic Manager instance
 		///</summary>
-		StatisticManager _statisticManager;
+		StatisticManager statisticManager;
 
 		///<summary>
 		///Generator instance
 		///</summary>
-		Generator _generator;
+		Generator generator;
 
-
+		///<summary>
+		///Getting daily information
+		///</summary>
+		ModelingInfo GetCurrentInfo(int requestAmount);
 };
 

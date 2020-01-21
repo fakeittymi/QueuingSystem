@@ -1,26 +1,20 @@
 #include "pch.h"
 #include "Processor.h"
-#include "StatisticManager.h"
 #include <vector>
 
 using namespace std;
 
-Processor::Processor(StatisticManager statisticManager, Generator generator, int newWorkDayCount) {
-	_statisticManager = statisticManager;
-	_generator = generator;
+Processor::Processor(StatisticManager& newStatisticManager, Generator& newGenerator, int& newWorkDayCount, int& newBaleCount) {
 
-	if (newWorkDayCount > 0) {
-		workDayCount = newWorkDayCount;
-	}
-	else {
-		workDayCount = 1;
-	}
-
-	_modelingInfo.bales = 0;
-	_modelingInfo.credit = 0;
-	_modelingInfo.debit = 0;
-	_modelingInfo.unsoldNewspapers = 0;
-	_modelingInfo.soldNewspapers = 0;
+	statisticManager = newStatisticManager;
+	generator = newGenerator;
+	baleCount = newBaleCount;
+	newspaperCount = baleCount * baleSize;
+	workDayCount = newWorkDayCount;
+	modelingInfo.credit = 0;
+	modelingInfo.debit = 0;
+	modelingInfo.unsoldNewspapers = 0;
+	modelingInfo.soldNewspapers = 0;
 	
 }
 
@@ -30,50 +24,37 @@ void Processor::Start() {
 
 	for (int i = 0; i < workDayCount; i++) {
 		
-		requestAmount = _generator.GenerateRequests();
-		ProfitCalculation(requestAmount);
-		_statisticManager.modelingInfoVec.push_back(_modelingInfo);
+		requestAmount = generator.GenerateRequests();
+		modelingInfo = GetCurrentInfo(requestAmount);
+		statisticManager.modelingInfoVec.push_back(modelingInfo);
 	}
 	
 }
 
-void Processor::ProfitCalculation(int _requestAmount) {
+std::vector<StatisticManager::ModelingInfo> Processor::GetModelingInfo() {
 
-	if (_requestAmount%baleSize == 0) {
-		_modelingInfo.bales = _requestAmount / baleSize;
+	return statisticManager.modelingInfoVec;
+
+}
+
+StatisticManager::ModelingInfo Processor::GetCurrentInfo(int requestAmount) {
+
+	ModelingInfo modelCurInfo;
+
+	if (newspaperCount - requestAmount <= 0) {
+		modelCurInfo.soldNewspapers = newspaperCount;
+		modelCurInfo.unsoldNewspapers = 0;
+		modelCurInfo.credit = 0;
+		modelCurInfo.debit = modelCurInfo.soldNewspapers * newspaperProfit;
+		modelCurInfo.untreated = requestAmount - newspaperCount;
 	}
 	else {
-		_modelingInfo.bales = _requestAmount / baleSize + 1;
+		modelCurInfo.soldNewspapers = requestAmount;
+		modelCurInfo.unsoldNewspapers = newspaperCount - requestAmount;
+		modelCurInfo.credit = modelCurInfo.unsoldNewspapers * newspaperCredit;
+		modelCurInfo.debit = modelCurInfo.soldNewspapers * newspaperProfit - modelCurInfo.credit;
+		modelCurInfo.untreated = 0;
 	}
 
-	_modelingInfo.unsoldNewspapers = _modelingInfo.bales * baleSize - _requestAmount;
-	_modelingInfo.credit = _modelingInfo.unsoldNewspapers * newspaperCredit;
-	_modelingInfo.debit = _requestAmount * newspaperProfit - _modelingInfo.credit;
-	_modelingInfo.soldNewspapers = _requestAmount;
-
-	if ((_modelingInfo.debit) < (_modelingInfo.bales - 1) * baleSize * newspaperProfit) {
-		_modelingInfo.bales--;
-		_modelingInfo.unsoldNewspapers = 0;
-		_modelingInfo.credit = 0;
-		_modelingInfo.debit = _modelingInfo.bales * baleSize * newspaperProfit;
-		_modelingInfo.soldNewspapers = _modelingInfo.bales * baleSize;
-	}
-}
-
-vector<StatisticManager::ModelingInfo> Processor::GetModelingInfo() {
-
-	return _statisticManager.modelingInfoVec;
-
-}
-		
-float Processor::GetAverageBales(vector<StatisticManager::ModelingInfo> _modelInfo) {
-
-	float tmp = 0;
-
-	for (int i = 0; i < workDayCount; i++) {
-
-		tmp += _modelInfo[i].bales;
-	}
-
-	return tmp / workDayCount;
+	return modelCurInfo;
 }

@@ -1,13 +1,14 @@
 #include "pch.h"
 #include "Generator.h"
+#include <chrono>
 #include <random>
+#include <math.h>
 
 Generator::Generator() {};
 
-Generator::Generator(int newCommon){
+Generator::Generator(int& newCommon){
 
     commonDayRequests = newCommon; 
-    specialDayRequests = 0;
 }
 
 int Generator::GetDayType() {
@@ -39,20 +40,29 @@ int Generator::GetDayType() {
 
 int Generator::GenerateRequests() {
 
-        switch (GetDayType())
-        {
-        case 0:
-            specialDayRequests = 0;
-            break;
-        case 1:
-            specialDayRequests = 50;
-            break;
-        case 2:
-            specialDayRequests = 100;
-            break;
-        }
+    int seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine engine(seed);
+    std::normal_distribution<double> comDistribution((double)commonDayRequests);
+    std::normal_distribution<double> firstTDistribution((double)50);
+    std::normal_distribution<double> secondTDistribution((double)100);
 
-    return commonDayRequests + specialDayRequests;
+    int commonRequests = (int)comDistribution(engine);
+    int specialDayRequests = 0;
+
+    switch (GetDayType())
+    {
+    case 0:
+        specialDayRequests = 0;
+        break;
+    case 1:
+        specialDayRequests = (int)firstTDistribution(engine);
+        break;
+    case 2:
+        specialDayRequests = (int)secondTDistribution(engine);
+        break;
+    }
+
+    return commonRequests + specialDayRequests;
 }
 
 

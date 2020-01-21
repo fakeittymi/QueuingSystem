@@ -1,4 +1,11 @@
 ﻿  Form1.cpp
+  Generator.cpp
+D:\Проекты\2 курс\Технологии программирования\QueuingSystem\Generator.cpp(43,14): warning C4244: 'initializing': conversion from '_Rep' to 'int', possible loss of data
+          with
+          [
+              _Rep=std::chrono::system_clock::rep
+          ]
+  Processor.cpp
   Program.cpp
   Generating Code...
   AssemblyInfo.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
